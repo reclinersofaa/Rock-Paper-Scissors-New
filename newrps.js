@@ -1,5 +1,14 @@
 var Human = 0; 
 var Comp = 0; 
+var rounds = 0;
+
+btns = document.querySelectorAll("button");
+HScore = document.querySelector(".HScore");
+CScore = document.querySelector(".CScore");
+CSel = document.querySelector(".CSel");
+RoundRes = document.querySelector(".RoundRes");
+resback = document.querySelector(".result");
+
 
 function CompChoice()
 {
@@ -8,49 +17,66 @@ function CompChoice()
     return arr[cmp];
 }
 
-function HumanChoice()
-{
-    var hum = prompt("Input your choice (R/P/S): ");
-    return hum;
-}
+btns.forEach(btn => {
+    btn.addEventListener("click", function(event) {
+        resback.style.backgroundColor = "black";
+        HChoice = event.target.value;
+        if (rounds <= 5) {
+            Round(HChoice);
+        } 
+        if (rounds > 5) { 
+            Game();
+        }
+    });
+});
 
-function Round()
+function Round() 
 {
-    HChoice = HumanChoice();
     CChoice = CompChoice();
-    console.log("Computer chooses: ",CChoice);
+    CSel.textContent = `Computer chooses ${CChoice}`;
 
     if (HChoice === CChoice){
-        console.log("TIE");
+        RoundRes.textContent = "Tied"
     }
     else if ((HChoice === "R" && CChoice === "P")||(HChoice === "P" && CChoice === "S")||(HChoice === "S" && CChoice === "R")){
-        console.log("Comp wins current round");
+        RoundRes.textContent = "Comp wins current round";
         Comp++;
     }
     else{
-        console.log("You win current round");
+        RoundRes.textContent = "You win current round";
         Human++;
     }
 
-    console.log("Your score: ",Human);
-    console.log("Comp score: ",Comp);
+    HScore.textContent = `You: ${Human}`;
+    CScore.textContent = `Computer: ${Comp}`;
+    rounds++; 
 }
 
-function Game(){
-    console.log("Game starts, play for 5 rounds: ");
-    for (var i = 0; i < 5; i++){
-        Round();
+function Game() {
+    console.log("Game starts, play for 5 rounds: "); 
+    resback.style.backgroundColor = "black";
+
+    if (Human > Comp) { 
+        RoundRes.textContent = "YOU WIN!!!";
+        CSel.textContent = " ";
+        RoundRes.style.fontSize = "65px";
+        resback.style.backgroundColor = "green";
+    } 
+    else if (Human === Comp) {
+        RoundRes.textContent = "DAMN STALEMATE!!!";
+        CSel.textContent = " ";
+        RoundRes.style.fontSize = "65px";
+    } 
+    else {
+        RoundRes.textContent = "YOU LOSE!!!";
+        CSel.textContent = " ";
+        RoundRes.style.fontSize = "65px";
+        resback.style.backgroundColor = "red";
     }
-    
-    if (Human > Comp){
-        console.log("YOU WIN :)");
-    }
-    else if (Human === Comp){
-        console.log("BLOODY STALEMATE!!!!");
-    }
-    else{
-        console.log("YOU LOSE :<");
-    }
+
+    rounds = 1;
+    Human = 0;
+    Comp = 0;
 }
 
-Game(); 
+
